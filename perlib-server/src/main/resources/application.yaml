@@ -1,0 +1,14 @@
+server:
+  servlet:
+    context-path: /perlib
+spring:
+  datasource:
+    url: jdbc:h2:file:./database/perlib
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: true
+  h2:
+    console.enabled: true
