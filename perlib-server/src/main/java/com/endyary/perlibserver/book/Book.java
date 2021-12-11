@@ -5,6 +5,11 @@ import com.endyary.perlibserver.misc.Language;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Model for a Book data
+ *
+ * @author Nenad Dramicanin
+ */
 @Entity
 @Table(name = "books")
 public class Book {
