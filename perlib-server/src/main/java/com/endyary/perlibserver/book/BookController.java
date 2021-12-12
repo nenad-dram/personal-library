@@ -1,5 +1,7 @@
 package com.endyary.perlibserver.book;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import java.util.List;
 @RequestMapping("/api/")
 public class BookController {
 
+    private static final Logger logger = LoggerFactory.getLogger(BookController.class);
+
     @Autowired
     private BookService bookService;
 
@@ -26,6 +30,7 @@ public class BookController {
      */
     @GetMapping("/books")
     public List<Book> getAllBooks() {
+        logger.info("Get all");
         return bookService.getAll();
     }
 
@@ -37,6 +42,7 @@ public class BookController {
      */
     @PostMapping("/books")
     public ResponseEntity<Book> createBook(@RequestBody Book book) {
+        logger.info("Create {}", book.toString());
         book = bookService.save(book);
         return ResponseEntity.ok(book);
     }
@@ -49,6 +55,7 @@ public class BookController {
      */
     @GetMapping("/books/{id}")
     public ResponseEntity<Book> getBookById(@PathVariable Long id) {
+        logger.info("Get by ID = {}", id);
         Book book = bookService.getById(id);
         return book != null ?
                 ResponseEntity.ok(book) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -63,6 +70,7 @@ public class BookController {
      */
     @PutMapping("/books/{id}")
     public ResponseEntity<Book> editBook(@PathVariable Long id, @RequestBody Book updatedBook) {
+        logger.info("Edit by ID = {}, {}", id, updatedBook.toString());
         Book book = bookService.update(id, updatedBook);
         return book != null ?
                 ResponseEntity.ok(book) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -75,6 +83,7 @@ public class BookController {
      */
     @DeleteMapping("/books/{id}")
     public ResponseEntity<Long> deleteBook(@PathVariable Long id) {
+        logger.info("Delete by ID = {}", id);
         boolean isDeleted = bookService.delete(id);
         return isDeleted ?
                 new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);

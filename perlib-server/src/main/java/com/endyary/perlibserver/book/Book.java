@@ -79,4 +79,9 @@ public class Book {
     public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
         this.lastModifiedDate = LocalDateTime.now();
     }
+
+    @Override
+    public String toString() {
+        return String.format("{name = %s, author = %s, language = %s}", this.name, this.author, this.language);
+    }
 }

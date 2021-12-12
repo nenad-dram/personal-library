@@ -1,5 +1,7 @@
 package com.endyary.perlibserver.book;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import java.util.Optional;
 @Service
 public class BookService {
 
+    private static final Logger logger = LoggerFactory.getLogger(BookService.class);
+
     @Autowired
     private BookRepository bookRepository;
 
@@ -29,7 +33,9 @@ public class BookService {
             book.setCreatedDate(LocalDateTime.now());
         }
         book.setLastModifiedDate(LocalDateTime.now());
-        return bookRepository.save(book);
+        book = bookRepository.save(book);
+        logger.info("Resource saved (id = {})", book.getId());
+        return book;
     }
 
     /**
@@ -40,13 +46,13 @@ public class BookService {
      */
     public Book getById(Long id) {
         Optional<Book> bookOptional = bookRepository.findById(id);
+        logger.info("Resource exists (id = {}): {}", id, bookOptional.isPresent());
         return bookOptional.orElse(null);
     }
 
     /**
      * Deletes a Book by the provided ID, if exists.
-     * The operation outcome is negative (false) if the book doesn't
-     * exist, otherwise positive (true).
+     * Returns false if a book doesn't exist, otherwise true.
      *
      * @param id the book id
      * @return the operation outcome
@@ -55,6 +61,7 @@ public class BookService {
         Book book = getById(id);
         if (book != null) {
             bookRepository.delete(book);
+            logger.info("Resource deleted (id = {})", book.getId());
             return true;
         }
         return false;
