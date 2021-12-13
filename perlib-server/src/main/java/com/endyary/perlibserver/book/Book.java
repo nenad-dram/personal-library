@@ -1,8 +1,10 @@
 package com.endyary.perlibserver.book;
 
 import com.endyary.perlibserver.misc.Language;
+import com.endyary.perlibserver.misc.ValueOfEnum;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 /**
@@ -19,14 +21,17 @@ public class Book {
     @Column(updatable = false)
     private Long id;
 
+    @NotBlank()
     @Column(nullable = false)
     private String name;
+
+    @NotBlank()
     @Column(nullable = false)
     private String author;
 
-    @Enumerated(EnumType.STRING)
+    @ValueOfEnum(enumClass = Language.class)
     @Column(nullable = false)
-    private Language language;
+    private String language;
 
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdDate;
@@ -56,11 +61,11 @@ public class Book {
         this.author = author;
     }
 
-    public Language getLanguage() {
+    public String getLanguage() {
         return language;
     }
 
-    public void setLanguage(Language language) {
+    public void setLanguage(String language) {
         this.language = language;
     }
 

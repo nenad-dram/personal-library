@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -41,7 +42,7 @@ public class BookController {
      * @return the created book
      */
     @PostMapping("/books")
-    public ResponseEntity<Book> createBook(@RequestBody Book book) {
+    public ResponseEntity<Book> createBook(@Valid @RequestBody Book book) {
         logger.info("Create {}", book.toString());
         book = bookService.save(book);
         return ResponseEntity.ok(book);
@@ -69,7 +70,7 @@ public class BookController {
      * @return the updated book
      */
     @PutMapping("/books/{id}")
-    public ResponseEntity<Book> editBook(@PathVariable Long id, @RequestBody Book updatedBook) {
+    public ResponseEntity<Book> editBook(@PathVariable Long id, @Valid @RequestBody Book updatedBook) {
         logger.info("Edit by ID = {}, {}", id, updatedBook.toString());
         Book book = bookService.update(id, updatedBook);
         return book != null ?
