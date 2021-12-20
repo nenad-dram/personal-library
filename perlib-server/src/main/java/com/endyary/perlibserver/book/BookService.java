@@ -3,9 +3,16 @@ package com.endyary.perlibserver.book;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,12 +75,29 @@ public class BookService {
     }
 
     /**
-     * Gets all books
+     * Finds books by the provided parameters (both book values and pagination values)
      *
-     * @return List of books
+     * @param name     Book's name
+     * @param author   Book's author
+     * @param language Book's language
+     * @param page     Number of result's page
+     * @param size     Number of items on the page
+     * @param sorts    Array of sort by parameters
+     * @return List of {@link Page} books
      */
-    public List<Book> getAll() {
-        return bookRepository.findAll();
+    public Page<Book> find(String name, String author, String language, Integer page, Integer size, String[] sorts) {
+        // Set query Specification
+        Specification<Book> nameSpec = BookSpecification.nameLike(name);
+        Specification<Book> authorSpec = BookSpecification.authorLike(author);
+        Specification<Book> languageSpec = BookSpecification.languageEquals(language);
+        Specification<Book> spec = Specification.where(nameSpec).and(authorSpec).and(languageSpec);
+
+        // Set query Order
+        List<Sort.Order> orders = getSortOrders(sorts);
+
+        Pageable paging = PageRequest.of(page, size, Sort.by(orders));
+
+        return bookRepository.findAll(spec, paging);
     }
 
     /**
@@ -94,6 +118,33 @@ public class BookService {
             dbBook = save(dbBook);
         }
         return dbBook;
+    }
+
+    /**
+     * Converts the provided string array or sort elements (both property and directions)
+     * into a list of {@link Sort.Order} elements
+     *
+     * @param sorts Array or sort elements
+     * @return list of {@link Sort.Order} elements
+     */
+    private List<Sort.Order> getSortOrders(String[] sorts) {
+
+        List<Sort.Order> orders = new ArrayList<>();
+
+        /*
+         * If there are multiple elements iterate through the whole list
+         * For one element: sorts = ["property", "direction"]
+         * For multiple elements: sorts = ["property1,direction1", "property2,direction2", ...]
+         */
+        if (sorts[0].contains(",")) {
+            Arrays.stream(sorts).forEach(sortOrder -> {
+                String[] sort = sortOrder.split(",");
+                orders.add(new Sort.Order("desc".equals(sort[1]) ? Sort.Direction.DESC : Sort.Direction.ASC, sort[0]));
+            });
+        } else {
+            orders.add(new Sort.Order("desc".equals(sorts[1]) ? Sort.Direction.DESC : Sort.Direction.ASC, sorts[0]));
+        }
+        return orders;
     }
 
 }

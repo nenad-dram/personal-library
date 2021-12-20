@@ -1,14 +1,19 @@
 package com.endyary.perlibserver.book;
 
+import com.endyary.perlibserver.misc.Language;
+import com.endyary.perlibserver.misc.ValueOfEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Exposes REST API methods for book management
@@ -17,6 +22,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/")
+@Validated
 public class BookController {
 
     private static final Logger logger = LoggerFactory.getLogger(BookController.class);
@@ -25,14 +31,31 @@ public class BookController {
     private BookService bookService;
 
     /**
-     * Retrieves all existing books
+     * Retrieves books for the provided parameters
      *
-     * @return the list of all books
+     * @return the list of books
      */
     @GetMapping("/books")
-    public List<Book> getAllBooks() {
-        logger.info("Get all");
-        return bookService.getAll();
+    public ResponseEntity<Map<String, Object>> getBooks(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String author,
+            @RequestParam(required = false) @ValueOfEnum(enumClass = Language.class) String language,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "${spring.data.web.pageable.default-page-size}") Integer size,
+            @RequestParam(defaultValue = "${spring.data.web.sort.sort-parameter}") String[] sorts) {
+
+        logger.info("Get books: name = {}, author = {}, language = {}, page = {}, size = {}, sort = {}",
+                name, author, language, page, size, sorts);
+
+        Page<Book> pageResult = bookService.find(name, author, language, page, size, sorts);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("books", pageResult.getContent());
+        response.put("totalItems", pageResult.getTotalElements());
+        response.put("currentPage", pageResult.getNumber());
+        response.put("totalPages", pageResult.getTotalPages());
+
+        return ResponseEntity.ok(response);
     }
 
     /**
