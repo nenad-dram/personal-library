@@ -18,6 +18,10 @@ spring:
         default-page-size: 10
       sort:
         sort-parameter: id,asc
+  security:
+    user:
+      name: nenad
+      password: '{bcrypt}$2a$10$s84ojDiP3XqZ6i0ib6ZTdeCdZH1yERECnrvT5aFW3Lh22ZV/h9C8O'
 # shutdown endpoint configuration
 management:
   endpoints:
