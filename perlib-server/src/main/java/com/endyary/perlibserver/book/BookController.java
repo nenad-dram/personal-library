@@ -2,9 +2,9 @@ package com.endyary.perlibserver.book;
 
 import com.endyary.perlibserver.misc.Language;
 import com.endyary.perlibserver.misc.ValueOfEnum;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +23,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/")
 @Validated
+@RequiredArgsConstructor
 public class BookController {
 
     private static final Logger logger = LoggerFactory.getLogger(BookController.class);
 
-    @Autowired
-    private BookService bookService;
+    private final BookService bookService;
 
     /**
      * Retrieves books for the provided parameters

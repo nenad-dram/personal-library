@@ -1,8 +1,8 @@
 package com.endyary.perlibserver.book;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,12 +22,12 @@ import java.util.Optional;
  * @author Nenad Dramicanin
  */
 @Service
+@RequiredArgsConstructor
 public class BookService {
 
     private static final Logger logger = LoggerFactory.getLogger(BookService.class);
 
-    @Autowired
-    private BookRepository bookRepository;
+    private final BookRepository bookRepository;
 
     /**
      * Saves a book object (sets the date values prior).
