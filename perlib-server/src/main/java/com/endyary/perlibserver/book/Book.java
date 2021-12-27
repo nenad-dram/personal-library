@@ -33,6 +33,7 @@ public class Book {
     @Column(nullable = false)
     private String author;
 
+    @NotBlank
     @ValueOfEnum(enumClass = Language.class)
     @Column(nullable = false)
     private String language;
