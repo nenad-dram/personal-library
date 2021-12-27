@@ -127,7 +127,7 @@ public class BookService {
      * @param sorts Array or sort elements
      * @return list of {@link Sort.Order} elements
      */
-    private List<Sort.Order> getSortOrders(String[] sorts) {
+    public List<Sort.Order> getSortOrders(String[] sorts) {
 
         List<Sort.Order> orders = new ArrayList<>();
 
