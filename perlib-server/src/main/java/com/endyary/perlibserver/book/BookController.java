@@ -12,6 +12,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,5 +113,26 @@ public class BookController {
         boolean isDeleted = bookService.delete(id);
         return isDeleted ?
                 new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Retrieves possible values for Book's language
+     *
+     * @return the collection of languages (name and value pairs)
+     */
+    @GetMapping("/languages")
+    public ResponseEntity<ArrayList<Map<String, String>>> getLanguages() {
+
+        logger.info("Get languages");
+
+        ArrayList<Map<String, String>> response = new ArrayList<>();
+        Arrays.stream(Language.values()).forEach(lang -> {
+            Map<String, String> language = new HashMap<>();
+            language.put("name", lang.name());
+            language.put("value", lang.getValue());
+            response.add(language);
+        });
+
+        return ResponseEntity.ok(response);
     }
 }

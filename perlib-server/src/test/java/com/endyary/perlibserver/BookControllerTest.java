@@ -6,6 +6,7 @@ import com.endyary.perlibserver.book.BookService;
 import com.endyary.perlibserver.misc.Language;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,5 +92,14 @@ public class BookControllerTest {
         String actualResponseBody = mvcResult.getResponse().getContentAsString();
         String expectedResponseBody = objectMapper.writeValueAsString(expectedErrorResponse);
         Assertions.assertThat(actualResponseBody).isEqualToIgnoringWhitespace(expectedResponseBody);
+    }
+
+    @Test
+    protected void getLanguages_returnCorrectSize() throws Exception {
+        int expectedSize = Language.values().length;
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/languages"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(expectedSize)));
     }
 }
