@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.endyary'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 sourceCompatibility = '17'
 
 repositories {
@@ -29,3 +29,22 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+task extractBootJar(type: Copy, dependsOn: bootJar) {
+    def zipFile = file("${buildDir}/libs/${rootProject.name}-${version}.jar")
+    def outputDir = file("${buildDir}/layers")
+
+    from zipTree(zipFile)
+    into outputDir
+}
+
+task dockerBuild(dependsOn: tasks.findByName("extractBootJar")) {
+    doLast {
+        exec {
+            commandLine "sh", "-c", "(docker rm ${rootProject.name} || true) " +
+                    "&& (docker rmi ${rootProject.name} || true)" +
+                    "&& docker build -t ${rootProject.name} ."
+        }
+    }
+}
+
