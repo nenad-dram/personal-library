@@ -47,9 +47,9 @@ The response body example for one book (also part of the search method response)
     "lastModifiedDate": "2021-12-15T11:24:38.071646"
 }`
 
-The Swagger UI page and the OpenAPI description (generated without any customization and partially incorrect) are available at _/swagger-ui/index.html_ and at _/v3/api-docs_ respectively
+The Swagger UI page and the OpenAPI description (generated without any customization and partially incorrect) are available at _/swagger-ui/index.html_ and at _/v3/api-docs_ respectively.
 
-Also the application shutdown is available via the Spring Actuator endpoint (_POST /actuator/shutdown_, without request body)
+Also the application shutdown is available via the Spring Actuator endpoint (_POST /actuator/shutdown_, without request body).
 
 __Security and authorization__: GET methods are permitted without authorization, while for all others the predefined username and password (application.yaml) must be provided via the Basic Authorization.
 
@@ -72,7 +72,7 @@ To start the JAR file execute the command:
 
 To build the image execute the command:
 `$ ./gradlew clean dockerBuild`  
-To create a container run the _runDocker.sh_:
+To create a container run _runDocker.sh_:
 `$ ./runDocker.sh`  
 To start an existing container execute the command:
 `$ docker start perlib-server`
@@ -80,4 +80,4 @@ To start an existing container execute the command:
 NOTE: The Docker image uses the layers from the fat JAR in order to improve build and start time of the image and the container.
  All dependencies are in one layer, whereas the code and the configuration is in another layer.  
  By executing the task _dockerBuild_ the following steps will be done: execute the _bootJar_ task, unpack the JAR, 
- delete the current (stopped) container, delete and the old image, build the new image
+ delete the current (stopped) container, delete and the old image, build the new image.
