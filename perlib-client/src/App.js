@@ -1,8 +1,16 @@
 import './App.css';
+import BookList from './components/BookList';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 function App() {
   return (
-    <div className="App">
+    <div>
+      <Header />
+      <div className="container">
+        <BookList></BookList>
+      </div>
+      <Footer />
     </div>
   );
 }
