@@ -1,9 +1,15 @@
+import * as React from 'react';
+import BookDialog from './BookDialog';
+
 function BookList() {
+    const [openBook, setOpenBook] = React.useState(false);
+
     return (
         <div>
             <h2 className="text-center">Book List</h2>
             <div>
-                <button className="btn btn-primary">Add Book</button>
+                <button className="btn btn-primary" onClick={() => setOpenBook(true)}>Add Book</button>
+                <BookDialog open={openBook} onClose={() => setOpenBook(false)} />
             </div>
             <br></br>
             <div className="row text-center">
@@ -22,7 +28,7 @@ function BookList() {
                             <td>Unknown Author</td>
                             <td>English</td>
                             <td>
-                                <button className="btn btn-info">Edit </button>
+                                <button className="btn btn-info" onClick={() => setOpenBook(true)}>Edit </button>
                                 <button style={{ marginLeft: "1rem" }} className="btn btn-danger">Delete </button>
                             </td>
                         </tr>
