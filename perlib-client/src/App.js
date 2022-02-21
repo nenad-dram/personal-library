@@ -2,16 +2,15 @@ import './App.css';
 import BookList from './components/BookList';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import { Box } from '@mui/system';
 
 function App() {
   return (
-    <div>
+    <Box>
       <Header />
-      <div className="container">
-        <BookList></BookList>
-      </div>
+      <BookList />
       <Footer />
-    </div>
+    </Box>
   );
 }
 
